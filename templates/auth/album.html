@@ -1,0 +1,169 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ album_data.title }}</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #001a66;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        #album-container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        #album-title {
+            font-size: 1.5em;
+            color: #001a66;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #photo-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        #photo-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #001a66;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #003399;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .upload-label {
+            background-color: #001a66;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Friendster - {{ album_data.title }}</h1>
+    </div>
+
+    <div id="album-container">
+        <h2 id="album-title">{{ album_data.title }}</h2>
+
+        <div id="photo-controls">
+            <label class="upload-label" for="photo-upload">Choose File</label>
+            <input type="file" id="photo-upload" accept="image/*">
+            <button id="add-photo-button">Add Photo</button>
+            <button id="delete-photo-button">Delete Latest Photo</button>
+            <button id="save-photos-button">Save Photos</button>
+        </div>
+
+        <div id="photo-container">
+            {% for photo in album_data.photos %}
+                {% if photo %}
+                    <img src="{{ photo }}" alt="Photo" onerror="this.style.display='none'">
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        // Generate a unique key for each album using ID and slugified title
+        const albumKey = `album_{{ album_data.id }}_{{ album_data.title|slugify }}`; // Unique identifier
+
+        // Add photo functionality
+        document.getElementById('add-photo-button').onclick = function() {
+            const photoInput = document.getElementById('photo-upload');
+            const file = photoInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    document.getElementById('photo-container').appendChild(img);
+                    photoInput.value = '';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                alert('Please choose a photo to upload.');
+            }
+        };
+
+        // Delete latest photo functionality
+        document.getElementById('delete-photo-button').onclick = function() {
+            const photoContainer = document.getElementById('photo-container');
+            if (photoContainer.lastChild) {
+                photoContainer.removeChild(photoContainer.lastChild);
+
+                // Update local storage after deletion
+                const photos = JSON.parse(localStorage.getItem(albumKey)) || [];
+                photos.pop();
+                localStorage.setItem(albumKey, JSON.stringify(photos));
+            } else {
+                alert('No photos to delete.');
+            }
+        };
+
+        // Save photos to local storage
+        document.getElementById('save-photos-button').onclick = function() {
+            const photos = [];
+            const photoElements = document.querySelectorAll('#photo-container img');
+            photoElements.forEach(img => {
+                photos.push(img.src);
+            });
+            localStorage.setItem(albumKey, JSON.stringify(photos)); // Save with a unique key per album
+            alert('Photos saved for ' + albumKey + '!');
+        };
+
+        // Load previously saved photos (if any)
+        const loadPhotos = () => {
+            const savedPhotos = JSON.parse(localStorage.getItem(albumKey)) || [];
+            savedPhotos.forEach(photo => {
+                const img = document.createElement('img');
+                img.src = photo;
+                img.onerror = function() { this.style.display = 'none'; }; // Hide if not loaded
+                document.getElementById('photo-container').appendChild(img);
+            });
+        };
+
+        // Load photos when the page loads
+        loadPhotos();
+    </script>
+</body>
+</html>

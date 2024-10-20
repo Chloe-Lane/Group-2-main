@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Friendster Profile</title>
+{% load static %}
+<link rel="stylesheet" href="{% static 'styles.css' %}">
+<style>
+body {
+font-family: Arial, sans-serif;
+background-color: #fff;
+margin: 0;
+padding: 0;
+transition: background-color 0.5s;
+}
+#top-bar {
+background-color: #dde7f2;
+padding: 10px 20px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+.logo {
+font-size: 24px;
+font-weight: bold;
+color: #333;
+}
+.search-bar input {
+padding: 5px;
+border-radius: 3px;
+border: 1px solid #aaa;
+}
+.top-links a {
+text-decoration: none;
+color: #333;
+margin: 0 5px;
+}
+#container {
+display: flex;
+padding: 20px;
+flex-wrap: wrap;
+}
+#left-column {
+width: 70%;
+padding-right: 20px;
+box-sizing: border-box;
+}
+#right-column {
+width: 30%;
+box-sizing: border-box;
+}
+.customization-panel {
+background-color: #f4f4f4;
+padding: 15px;
+margin-bottom: 20px;
+border: 1px solid #ccc;
+border-radius: 5px;
+}
+.profile-section, .photo-gallery, .friends-section {
+margin-bottom: 20px;
+border: 1px solid #ccc;
+padding: 15px;
+border-radius: 5px;
+background-color: #f9f9f9;
+}
+.profile-section img {
+border-radius: 50%;
+width: 120px;
+height: 120px;
+margin-bottom: 15px;
+}
+.photos img {
+width: 100px;
+height: 100px;
+margin: 5px;
+border-radius: 5px;
+border: 1px solid #ccc;
+}
+.music-player {
+margin-top: 20px;
+background-color: #e9e9e9;
+padding: 10px;
+border-radius: 5px;
+}
+</style>
+</head>
+<body>
+
+<div id="top-bar">
+<div class="logo">Friendster</div>
+<div class="search-bar">
+<input type="text" placeholder="Search Web / Username">
+</div>
+<div class="top-links">
+<a href = '{% url 'profile_list' %}'> People </a> |
+<a href="#">Help</a> |
+<a href="{% url 'logout' %}">Log Out</a>
+</div>
+</div>
+
+<div id="container">
+<!-- Left Column -->
+<div id="left-column">
+<div class="profile-section">
+<img src="{% static 'images/example.jpg' %}" alt="Profile Picture" id="profile-image">
+<h2 id="profile-name">{{ first_name }}{% if not hide_last_name %} {{ last_name }}{% endif %}</h2>
+<p id="profile-quote">"I find studying addictive. HAHA"</p>
+<ul class="profile-details">
+<li id="profile-details">Female, 18, Single</li>
+<li id="member-since">Member Since: Aug 2004</li>
+<li id="location">Location: Quezon City, PH</li>
+<li id="college">College: Trinity University Of Asia</li>
+</ul>
+<div class="profile-links">
+<a href="#">View Messages</a> |
+<a href="#">Create Blog</a>
+</div>
+</div>
+
+<div class="customization-panel">
+<h4>Customize Your Profile</h4>
+<label for="bg-color">Background Color:</label>
+<input type="color" id="bg-color" value="#ffffff" onchange="changeBackgroundColor(event)">
+<br>
+<label for="font-style">Font Style:</label>
+<select id="font-style" onchange="changeFontStyle(event)">
+<option value="Arial">Arial</option>
+<option value="Courier New">Courier New</option>
+<option value="Georgia">Georgia</option>
+<option value="Times New Roman">Times New Roman</option>
+<option value="Verdana">Verdana</option>
+</select>
+<br>
+<label for="font-color">Name Font Color:</label>
+<input type="color" id="font-color" value="#000000" onchange="changeFontColor(event)">
+<br>
+<label for="text-color">Text Color:</label>
+<input type="color" id="text-color" value="#333333" onchange="changeTextColor(event)">
+<br>
+<label for="profile-pic">Profile Picture URL:</label>
+<input type="text" id="profile-pic" placeholder="Enter image URL" onchange="updateProfilePicture(event)">
+<br>
+<button onclick="savePreferences()">Save Preferences</button>
+</div>
+
+<div class="music-player">
+<h4>Upload Your Music</h4>
+<input type="file" id="music-upload" accept="audio/*" onchange="loadMusic(event)">
+<audio id="audio-player" controls style="display: none;">
+Your browser does not support the audio element.
+</audio>
+</div>
+</div>
+
+<!-- Right Column -->
+<div id="right-column">
+
+    <div class="friends-section">
+        <h3 id="friends-title">{{ user.username }}'s Friends</h3>
+        <div class="friends-list">
+            <h4>Friends List ({{ user.profile.friends.count }} friends)</h4>
+<ul id="friends-list">
+    {% for friend in user.profile.friends.all %}
+        {% if friend.id != user.id %}
+            <li><a href="{% url 'page_view' friend.username %}"> @{{ friend.username }}</a></li>
+
+        {% endif %}
+    {% empty %}
+        <li>You have no friends yet.</li>
+    {% endfor %}
+</ul>
+
+        <!-- Adjusted Album Section -->
+                <div class="album-section">
+                    <div>
+                        <h4>Album 1</h4>
+                        <button onclick="window.location.href='{% url 'album' username=user.username album_id=1 %}'">Go to Album 1</button>
+                    </div>
+                    <div>
+                        <h4>Album 2</h4>
+                        <button onclick="window.location.href='{% url 'album' username=user.username album_id=2 %}'">Go to Album 2</button>
+                    </div>
+                    <div>
+                        <h4>Album 3</h4>
+                        <button onclick="window.location.href='{% url 'album' username=user.username album_id=3 %}'">Go to Album 3</button>
+                    </div>
+                    <div>
+                        <h4>Album 4</h4>
+                        <button onclick="window.location.href='{% url 'album' username=user.username album_id=4 %}'">Go to Album 4</button>
+                    </div>
+                </div>
+
+            <!-- Friend Requests Section -->
+            <h4>Friend Requests</h4>
+            <ul id="friend-requests-list">
+                <!-- Loop through incoming friend requests in Django template -->
+                {% for request in friend_requests %}
+                <div>
+                    <p>{{ request.from_user.username }} sent you a friend request.</p>
+                    <a href="{% url 'accept_friend_request' request.id %}">Accept</a>
+                    <a href="{% url 'decline_friend_request' request.id %}">Decline</a>
+                </div>
+                {% empty %}
+                    <li>No friend requests.</li>
+                {% endfor %}
+            </ul>
+
+            <!-- Send Friend Request Section -->
+            <div class="send-friend-request">
+                <h4>Add a Friend</h4>
+                <form action="{% url 'send_friend_request' user_id=user.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="text" id="friend-username" placeholder="Enter username">
+                    <button type="button" onclick="sendFriendRequest()"> Send Friend Request</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+// Load saved preferences on page load
+window.onload = function() {
+const preferences = JSON.parse(localStorage.getItem('profilePreferences')) || {};
+if (preferences.backgroundColor) {
+document.body.style.backgroundColor = preferences.backgroundColor;
+document.getElementById('bg-color').value = preferences.backgroundColor;
+}
+if (preferences.fontStyle) {
+document.getElementById('profile-name').style.fontFamily = preferences.fontStyle;
+document.getElementById('font-style').value = preferences.fontStyle;
+}
+if (preferences.fontColor) {
+document.getElementById('profile-name').style.color = preferences.fontColor;
+document.getElementById('font-color').value = preferences.fontColor;
+}
+if (preferences.textColor) {
+    document.querySelectorAll('#profile-quote, #profile-details, #member-since, #location, #college, #gallery-title, #friends-title').forEach(element => {
+    element.style.color = preferences.textColor;
+});
+    document.getElementById('text-color').value = preferences.textColor;
+}
+if (preferences.profilePic) {
+    document.getElementById('profile-image').src = preferences.profilePic;
+    document.getElementById('profile-pic').value = preferences.profilePic;
+}
+};
+
+function changeBackgroundColor(event) {
+    document.body.style.backgroundColor = event.target.value;
+}
+
+function changeFontStyle(event) {
+    document.getElementById('profile-name').style.fontFamily = event.target.value;
+}
+
+function changeFontColor(event) {
+    document.getElementById('profile-name').style.color = event.target.value;
+}
+
+function changeTextColor(event) {
+    const color = event.target.value;
+    document.querySelectorAll('#profile-quote, #profile-details, #member-since, #location, #college, #gallery-title, #friends-title').forEach(element => {
+    element.style.color = color;
+    });
+}
+
+function updateProfilePicture(event) {
+const newUrl = event.target.value;
+document.getElementById('profile-image').src = newUrl;
+}
+
+function loadMusic(event) {
+const audioPlayer = document.getElementById('audio-player');
+const file = event.target.files[0];
+if (file) {
+const fileURL = URL.createObjectURL(file);
+audioPlayer.src = fileURL;
+audioPlayer.style.display = 'block';
+audioPlayer.play();
+}
+}
+
+function savePreferences() {
+const backgroundColor = document.body.style.backgroundColor;
+const fontStyle = document.getElementById('profile-name').style.fontFamily;
+const fontColor = document.getElementById('profile-name').style.color;
+const textColor = document.querySelector('#profile-quote').style.color; // Gets text color from the quote as an example
+const profilePic = document.getElementById('profile-image').src;
+
+const preferences = {
+backgroundColor: backgroundColor,
+fontStyle: fontStyle,
+fontColor: fontColor,
+textColor: textColor,
+profilePic: profilePic
+};
+
+localStorage.setItem('profilePreferences', JSON.stringify(preferences));
+alert('Preferences saved!');
+}
+function sendFriendRequest() {
+    const username = document.getElementById('friend-username').value;
+    if (username) {
+        // Implement AJAX call to send the friend request
+        fetch(`/send-friend-request/${username}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Friend request sent!');
+            } else {
+                alert('Unable to send friend request.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    } else {
+        alert('Please enter a valid username.');
+    }
+}
+
+function acceptFriendRequest(requestId) {
+    // AJAX call to accept the friend request
+    fetch(`/accept-friend-request/${requestId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Friend request accepted!');
+            location.reload();
+        } else {
+            alert('Unable to accept friend request.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function declineFriendRequest(requestId) {
+    // AJAX call to decline the friend request
+    fetch(`/decline-friend-request/${requestId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Friend request declined!');
+            location.reload();
+        } else {
+            alert('Unable to decline friend request.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+</script>
+
+</body>
+</html>

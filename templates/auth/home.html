@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ececec;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center;   /* Center vertically */
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 1000px; /* Adjust width as needed to accommodate both elements */
+            background-color: #F5F5F5;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container {
+            flex: 2; /* Takes up more space */
+            position: relative; /* Necessary for absolute positioning inside */
+        }
+
+        h2 {
+            color: #435E86; /* Text color */
+            background-color: #E5F0FA; /* Light blue background */
+            font-size: 18px;
+            margin-bottom: 10px;
+            border: 2px solid lightsteelblue; /* Add border around the heading */
+            border-radius: 2px; /* Optional: adds rounded corners */
+            padding: 7px; /* Padding inside the border */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Optional: adds shadow for a subtle 3D effect */
+        }
+
+        h3 {
+            background-color: #f0f0f0; /* Light gray */
+            padding: 3px;
+            border-radius: 1px; /* Optional: adds rounded corners */
+            font-size: 16px; /* Size similar to <h4> */
+            margin-top: 0;
+            margin-bottom: 10px; /* Space below the heading */
+            color: midnightblue;
+        }
+
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+            margin-left: 25px; /* Add left margin */
+        }
+
+        table td {
+            padding: 8px 0;
+            margin-left: 15px; /* Add left margin */
+        }
+
+        /* Make labels bold */
+        table td:first-child {
+            font-weight: bold;
+            margin-left: 0; /* Remove margin-left from the first cell */
+        }
+
+        input[type="email"], input[type="password"], input[type="text"] {
+            padding: 3px;
+            border: 1px solid #ccc;
+            border-radius: 1px;
+            box-sizing: border-box;
+            width: 230px;
+        }
+
+        .small-input {
+            width: auto;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center; /* Vertically centers items */
+            gap: 10px; /* Initial space between elements, adjust as needed */
+            position: relative; /* Allows absolute positioning adjustments */
+        }
+
+        input[type="checkbox"] {
+            margin: 0; /* Resets default margin */
+            position: relative; /* Allows fine adjustment */
+            left: 4px; /* Adjust this value to move the checkbox left or right */
+            top: 0px; /* Adjust this value to move the checkbox up or down */
+        }
+
+        .hide-last-name-note {
+            display: inline-block;
+            font-size: 14px; /* Match the size used for the 'login ID' text */
+            color: #555; /* Match the color of the note */
+            vertical-align: middle; /* Align with the middle of the checkbox */
+        }
+
+        .captcha {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-left: 30px;
+        }
+
+        .captcha img {
+
+            width: 400px; /* Baguhin ito ayon sa gusto mong lapad */
+            height: 100px; /* Baguhin ito ayon sa gusto mong taas */
+            margin-bottom: 10px; /* Space between image and input field */
+            margin-left: 5px;
+            margin-top: 5px; /* Space above the image */
+
+        }
+
+        .captcha-input-container {
+            display: flex;
+
+        }
+
+        .captcha-input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            width: 250px; /* Adjust width as needed */
+            margin-right: 10px; /* Space between input field and text */
+        }
+
+        .captcha-text {
+            color: #555;
+            font-size: 14px;
+        }
+
+        button {
+            display: inline-block; /* Adjust width to fit text */
+            padding: 10px 20px; /* Add some padding for better appearance */
+            background-color: transparent; /* Remove background color for normal button style */
+            color: #435E86; /* Text color same as the heading */
+            border: 2px solid gray; /* Add border with the same color */
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold; /* Optional: makes the text bold */
+            text-align: center; /* Center the text */
+            margin-top: -20px; /* Space above the button */
+            margin-left: 169px;
+        }
+
+        button:hover {
+            background-color: #f0f0f0; /* Light background on hover */
+            color: #435E86; /* Ensure text color remains the same on hover */
+        }
+
+        .info-box {
+            background-color: #f0f0f0; /* Light gray */
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-left: 20px; /* Space between the form and the info box */
+            margin-top: 50px;
+            width: 250px; /* Set a fixed width to make it narrower */
+        }
+
+
+        .info-box ul {
+            margin: 20px;
+            padding-left: 20px;
+        }
+
+        .info-box li {
+            margin-bottom: 10px; /* Add space between list items */
+        }
+
+        .captcha-container {
+            position: relative; /* Relative positioning for containing absolute elements */
+            margin-bottom: 20px; /* Space below the CAPTCHA section */
+        }
+
+        .captcha-agreement {
+            font-size: 14px;
+            color: #555;
+            margin-top: 10px;
+        }
+
+        .login-id-note {
+            display: inline-block;
+            font-size: 14px;
+            color: #555;
+            margin-left: 10px; /* Space between the input field and the note */
+            vertical-align: middle; /* Align with the middle of the input field */
+        }
+
+        .privacy-policy {
+            color: royalblue; /* SkyBlue1 color */
+        }
+
+        select.custom-dropdown {
+            appearance: none;
+            -webkit-appearance: none; /* For Safari */
+            -moz-appearance: none; /* For Firefox */
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: white;
+            margin-right: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        select.custom-dropdown:focus {
+            outline: none;
+            border-color: #435E86;
+            box-shadow: 0 0 3px #aaa;
+        }
+
+        .small-input-container {
+            display: flex;
+            align-items: center;
+            gap: 5px; /* Space between each dropdown */
+        }
+
+        input[type="radio"] + label {
+            color: #5E8FC7; /* Set the font color to light blue */
+            font-size: 14px; /* Optional: adjust the font size if needed */
+            margin-right: 10px; /* Optional: add space between radio buttons */
+        }
+
+            .login-text {
+        position: absolute; /* Allows for positioning */
+        margin-left: 830px;
+        color: #435E86; /* Match the heading color */
+        font-size: 14px; /* Adjust font size as needed */
+    }
+
+    .error-message {
+        color: red;
+        font-weight: bold;
+        text-align: center;
+        background-color: #ffdddd;
+        border: 1px solid #ff5c5c;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+    }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="form-container">
+        <h2>Join Friendster</h2>
+        <form method="post" action="{% url 'home' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <table>
+                <tr>
+                    <td>Email Address:</td>
+                    <td>
+                        <input type="email" id="email" name="email" required>
+                        <span class="login-id-note">Used as login ID</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Password:</td>
+                    <td><input type="password" id="password" name="password" required></td>
+                </tr>
+                <tr>
+                    <td>First Name:</td>
+                    <td><input type="text" id="first_name" name="first_name" required></td>
+                </tr>
+                <tr>
+                    <td>Last Name:</td>
+                    <td>
+                        <div class="checkbox-container">
+                            <input type="text" id="last_name" name="last_name" required>
+                            <input type="checkbox" name="hide_last_name">
+                            <span class="hide-last-name-note">Hide last name on my profile</span>
+                        </div>
+                    </td>
+                </tr>
+
+            <tr>
+                    <td>Date of Birth:</td>
+                    <td>
+                        <!-- Month Dropdown -->
+                        <select name="birth_month" id="birth_month" class="small-input" required>
+                            <option value="">Month</option>
+                            <option value="01">January</option>
+                            <option value="02">February</option>
+                            <option value="03">March</option>
+                            <option value="04">April</option>
+                            <option value="05">May</option>
+                            <option value="06">June</option>
+                            <option value="07">July</option>
+                            <option value="08">August</option>
+                            <option value="09">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+
+                        <!-- Day Dropdown (1 to 31) -->
+                        <select name="birth_day" id="birth_day" class="small-input" required>
+                            <option value="">Day</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                        </select>
+
+                        <!-- Year Dropdown -->
+                        <select name="birth_year" id="birth_year" class="small-input" required>
+                            <option value="">Year</option>
+                            <!-- Years will be populated by JS -->
+                        </select>
+
+                        <small>Must be 16+.</small>
+                    </td>
+            </tr>
+
+                        <script>
+            // Populate year dropdown
+            const currentYear = new Date().getFullYear();
+            const startYear = currentYear - 100; // For example, last 100 years
+            const yearSelect = document.getElementById('birth_year');
+
+            for (let i = currentYear; i >= startYear; i--) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.text = i;
+                yearSelect.appendChild(option);
+            }
+
+            // Adjust days based on the selected month and year
+            const monthSelect = document.getElementById('birth_month');
+            const daySelect = document.getElementById('birth_day');
+
+            monthSelect.addEventListener('change', updateDays);
+            yearSelect.addEventListener('change', updateDays);
+
+            function updateDays() {
+                const month = monthSelect.value;
+                const year = yearSelect.value;
+
+                // Clear the existing days
+                daySelect.innerHTML = '<option value="">Day</option>';
+
+                if (month && year) {
+                    // Calculate the number of days in the selected month and year
+                    const daysInMonth = new Date(year, month, 0).getDate();
+
+                    // Populate the day dropdown with the correct number of days
+                    for (let i = 1; i <= daysInMonth; i++) {
+                        const option = document.createElement('option');
+                        option.value = i < 10 ? '0' + i : i; // Format day as 01, 02, etc.
+                        option.text = i;
+                        daySelect.appendChild(option);
+                    }
+                }
+            }
+
+            // Validate age to ensure the user is 16+
+            function validateAge() {
+                const day = daySelect.value;
+                const month = monthSelect.value;
+                const year = yearSelect.value;
+
+                if (day && month && year) {
+                    const birthDate = new Date(`${year}-${month}-${day}`);
+                    const today = new Date();
+                    const age = today.getFullYear() - birthDate.getFullYear();
+                    const hasBirthdayPassed = today.getMonth() > birthDate.getMonth() ||
+                        (today.getMonth() === birthDate.getMonth() && today.getDate() >= birthDate.getDate());
+
+                    if (age < 16 || (age === 16 && !hasBirthdayPassed)) {
+                        alert("You must be at least 16 years old.");
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            // Attach validation function on form submission
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function(event) {
+                if (!validateAge()) {
+                    event.preventDefault(); // Prevent form submission if age is not valid
+                }
+            });
+        </script>
+
+                <tr>
+                    <td>Gender:</td>
+                    <td>
+                        <input type="radio" id="male" name="gender" value="male" required>
+                        <label for="male">Male</label>
+
+                        <input type="radio" id="female" name="gender" value="female" required>
+                        <label for="female">Female</label>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Country:</td>
+                    <td>
+                        <select id="country" name="country" required>
+                            <option value="">Select Country</option>
+                            <option value="USA">United States</option>
+                            <option value="Canada">Canada</option>
+                            <option value="UK">United Kingdom</option>
+                            <option value="Australia">Australia</option>
+                            <option value="India">India</option>
+                            <option value="Germany">Germany</option>
+                            <option value="France">France</option>
+                            <option value="Brazil">Brazil</option>
+                            <option value="Japan">Japan</option>
+                            <option value="Mexico">Mexico</option>
+                            <option value="Italy">Italy</option>
+                            <option value="South Korea">South Korea</option>
+                            <option value="Spain">Spain</option>
+                            <option value="Russia">Russia</option>
+                            <option value="Netherlands">Netherlands</option>
+                            <option value="South Africa">South Africa</option>
+                            <option value="Philippines">Philippines</option>
+                            <option value="Indonesia">Indonesia</option>
+                            <option value="Turkey">Turkey</option>
+                            <option value="Thailand">Thailand</option>
+                        </select>
+                    </td>
+                </tr>
+
+            </table>
+
+            <h3>Optional Information</h3>
+            
+            {% if messages %}
+            <div class="error-message">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+            {% endif %}
+        
+            <!-- CAPTCHA section -->
+            <div class="captcha-container">
+                <table>
+                    <tr>
+                        <td>Verify registration:</td>
+                        <td>
+                            <div class="captcha">
+                                <img src="{% url 'generate_captcha' %}" alt="CAPTCHA" id="captcha-image" >
+                                <div class="captcha-input-container">
+                                    <input type="text" name="captcha" class="captcha-input" required>
+                                    <span class="captcha-text">Enter the characters from above</span>
+                                </div>
+                                <div class="captcha-agreement">
+                                    By clicking the "Register" button you agree to Friendster's terms of service, and certify that you are over 16 years of age.
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <button type="submit">Register</button></form>
+
+</div>
+
+    <div class="info-box">
+        <h3>Why Join?</h3>
+        <p>With Friendster, you can:</p>
+        <ul>
+            <li>Keep tabs on friends.</li>
+            <li>Reconnect with old friends, roommates, schoolmates, co-workers, etc.</li>
+            <li>Meet friends of friends.</li>
+            <li>Build a custom profile, post photos, start a blog, and much more!</li>
+        </ul>
+         <p>Friendster will never send you spam or sell your email address. It’s all in our <span class="privacy-policy">privacy policy</span>.</p>
+
+    </div>
+
+        <div class="login-text">
+            <p>Already a member? <a href="{% url 'login' %}">Log In</a></p>
+        </div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In</title>
+    <style>
+        /* Existing styles remain unchanged */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ececec;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 400px;
+            padding: 20px;
+            background-color: #F5F5F5;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            text-align: center;
+        }
+        h2 {
+            text-align: left;
+            color: black;
+        }
+        form {
+            margin-top: 20px;
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px; /* Reduce the margin between inputs */
+        }
+        label {
+            flex: 1;
+            margin-right: 10px;
+            text-align: left;
+        }
+        input {
+            flex: 4;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: lightgray;
+            color: black;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #3b5174;
+        }
+        p {
+            margin-top: 15px;
+        }
+        a {
+            color: #435E86;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Log In</h2>
+
+    <form method="POST" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" name="password" required>
+        </div>
+
+        {% if error %}
+            <p style="color: red;">{{ error }}</p>
+        {% endif %}
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p>Don't have an account? <a href="{% url 'home' %}">Register here</a></p>
+    <p><a href="{% url 'forgot_password' %}">Forgot Password?</a></p> <!-- Forgot Password link -->
+
+</div>
+
+</body>
+</html>
