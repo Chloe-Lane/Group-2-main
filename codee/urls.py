@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+
+import profiles
 from .views import *
 from . import views
 from django.urls import path
@@ -43,14 +45,11 @@ urlpatterns = [
     path('reset-password/<uidb64>/<token>/', reset_password, name='reset_password'),
     path('send-verification-code/', send_verification_code, name='send_verification_code'),
     path('verify-code/', verify_code, name='verify_code'),
-    path('send-friend-request/<int:user_id>/', views.send_friend_request, name='send_friend_request'),
-    path('accept-friend-request/<int:request_id>/', views.accept_friend_request, name='accept_friend_request'),
-    path('decline-friend-request/<int:request_id>/', views.decline_friend_request, name='decline_friend_request'),
+    path('send-friend-request/<int:user_id>/', profiles.views.send_friend_request, name='send_friend_request'),
+    path('accept-friend-request/<int:request_id>/', profiles.views.accept_friend_request, name='accept_friend_request'),
+    path('decline-friend-request/<int:request_id>/', profiles.views.decline_friend_request, name='decline_friend_request'),
     path('profiles/', include('profiles.urls')),
-    path('', include('tweets.urls')),  # Include URLs from the tweets app
-    path('login/', LoginView.as_view(template_name='tweets/login.html'), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
-    path('', views.user_login, name='home'),
     path('page/<str:username>/album.html', views.album_view, name='album'),
     path('page/<str:username>/album/<int:album_id>/', views.album_view, name='album'),
 ]

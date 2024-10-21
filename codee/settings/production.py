@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'codee',
     'captcha',
     'profiles',
-    'tweets',
 ]
 
 MIDDLEWARE = [
