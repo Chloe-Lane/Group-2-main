@@ -1,1 +1,1 @@
-web: gunicorn codee.wsgi
+web: gunicorn codee.wsgi --log -
