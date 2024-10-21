@@ -37,9 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'codee',
-    'tweets',
     'captcha',
     'profiles',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -126,11 +126,13 @@ STATICFILES_DIRS = [
     BASE_DIR / "static_my_project",
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static", "static_root")
+STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn", "static_root")
 
 MEDIA_URL = 'media/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "static", "media_root")
+MEDIA_ROOT = os.path.join(BASE_DIR, "static_cdn", "media_root")
+
+from codee.aws.conf import *
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

@@ -25,7 +25,6 @@ from . import views
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
 from profiles.views import send_friend_request, accept_friend_request, decline_friend_request, user_profile
-from tweets.views import user_login
 
 # Import View
 
@@ -35,7 +34,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
     path('login/', login_view, name='login'),
-    path('tweet/', include('tweets.urls')),
     path('page/<str:username>/', page_view, name='page_view'),
     path('logout/', custom_logout, name='logout'),
     path('captcha/', include('captcha.urls')),

@@ -38,9 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'codee',
-    'tweets',
     'captcha',
     'profiles',
+    'storages'
 ]
 
 MIDDLEWARE = [
