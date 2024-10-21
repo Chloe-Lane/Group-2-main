@@ -1,1 +1,1 @@
-web: gunicorn Group-2-Group-2.wsgi
+web: gunicorn codee.wsgi
