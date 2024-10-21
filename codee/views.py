@@ -4,16 +4,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import logout
 from PIL import Image, ImageDraw, ImageFont
 from django.http import HttpResponse
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from django.utils.encoding import force_str, force_bytes
-from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
-from django.core.mail import send_mail
 from django.conf import settings
 from profiles.models import Profile
-from profiles.views import send_friend_request, accept_friend_request, decline_friend_request, user_profile
-from tweets.views import user_login
-from django.urls import reverse
 
 
 def generate_captcha(request):
